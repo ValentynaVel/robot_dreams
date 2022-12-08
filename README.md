@@ -1,2 +1,2 @@
 # robot_dreams
-Python course homework. Ukrainian IT generation programme.
+This is Python course homework. Ukrainian IT generation programme.

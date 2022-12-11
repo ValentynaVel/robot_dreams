@@ -7,17 +7,13 @@ user_input = input("Enter number or word: ")
 
 if user_input.isdigit():
     number = int(user_input)
-
-    def is_even():
-        return number % 2 == 0
-    """This function checks if the number is even or odd."""
-
-    if is_even():
+    if number % 2 == 0:
         print("This is number " + str(number) + ". It is even.")
     else:
         print("This is number " + str(number) + ". It is odd.")
 else:
     print("This is word. It contains " + str(len(user_input)) + " letters.")
+
 
 
 

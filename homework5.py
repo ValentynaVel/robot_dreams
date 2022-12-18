@@ -11,7 +11,7 @@ for item in user_input:
         else:
             print(f'This is digit {item}. It is odd.')
     elif item.isalpha():
-        if str(item).istitle():
+        if item.isupper():
             print(f'This is letter {item}. It is capitalized.')
         else:
             print(f'This is letter {item}. It is not capitalized.')

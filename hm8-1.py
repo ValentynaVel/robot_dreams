@@ -1,21 +1,22 @@
 # 1 Написати власний декоратор, задачею якого має бути друк назви функції і часу, коли вона була викликана.
 # Декоратор має працювати для різних функцій однаково.
+
 # importing library
 import time
 import math
 
+# decorator to calculate current time when function is called
 
-# decorator to calculate curent time when function is called
+
 def calculate_time(func):
-    def inner1(*args, **kwargs):
-        # storing time before function execution
+
+    def wrap(*args, **kwargs):
+        # storing time before function call
         begin = time.localtime()
-
-        func(*args, **kwargs)
-
+        res = func(*args, **kwargs)
         print(f"The function {func.__name__}, called at {begin.tm_hour}:{begin.tm_min}.")
-
-    return inner1
+        return res
+    return wrap
 
 
 # function example
@@ -25,4 +26,4 @@ def squareRoot(num):
 
 
 # calling the function.
-squareRoot(20)
+squareRoot(40)

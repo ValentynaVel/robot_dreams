@@ -3,17 +3,23 @@
 #  виникнення будь-якої помилки вона має бути надрукована текстом, проте програма не має завершити своєї роботи.
 
 class MyContextManager:
-    def __init__(self, value):
-        self.value = value
     def __enter__(self):
         print("="*10)
+
     def __exit__(self, exc_type, exc_val, exc_tb):
+        if exc_type:
+            print(f'Exception value: {exc_val} appeared.')
         print("="*10)
+
+        # Your context manager should print the value of an exception if there is one. if exc_type: print(exc_value)
+        # will make it works
         return True
-with MyContextManager(1) as some_value:
-    try:
-        print(4/2)
-    except Exception as e:
-        print(type(e), e)
-    finally:
-        print(f'some value is {some_value}')
+
+
+a = 0
+b = 6
+
+with MyContextManager():
+    print(b/a)
+
+print('End of program')

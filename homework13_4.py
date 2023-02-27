@@ -13,7 +13,7 @@ from pprint import pprint
 conn = sqlite3.connect('database.sqlite')
 cursor = conn.cursor()
 
-query = ("SELECT age, COUNT(id) FROM users GROUP BY age ORDER BY COUNT(id), age desc")
+query = ("SELECT age, COUNT(id) as users FROM users GROUP BY age ORDER BY users desc, age")
 
 
 res = cursor.execute(query)

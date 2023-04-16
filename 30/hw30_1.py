@@ -11,12 +11,13 @@
 import random
 import requests
 
-gl = "https://www.google.co.uk/"
-fb = "https://www.facebook.com/"
-tw = "https://twitter.com/"
-am = "https://www.amazon.co.uk/"
-ap = "https://www.apple.com/"
+lst_url = [
+    "https://www.google.co.uk/",
+    "https://www.facebook.com/",
+    "https://twitter.com/",
+    "https://www.amazon.co.uk/",
+    "https://www.apple.com/"]
 
-lst_url = [gl, fb, tw, am, ap]
 res = requests.get(random.choice(lst_url))
-print(res.status_code)
+print(res.status_code, len(res.text), random.choice(lst_url))
+

@@ -1,6 +1,6 @@
 import requests
 
-API_key = 'bb9afbcf5556e45bba9c7109de792691'
+API_key = '' # add your API key
 city_name = input("Enter city name: ")
 
 # function to get coordinates of a city
@@ -18,13 +18,13 @@ def get_current_weather(city_name):
     coordinates = get_city_coordinates(city_name)
     if coordinates is not None:
         lat, lon = coordinates
-        url = f'https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&hourly=temperature_2m'
+        url = f'https://api.open-meteo.com/v1/forecast?latitude={lat}&longitude={lon}&current_weather=true'
         response = requests.get(url)
         if response.status_code == 200:
             data = response.json()
-            current_weather = data['hourly']
-            print(f"Hourly temperature in {city_name}: {current_weather['temperature_2m']}°C")
-            return
-    print("Error")
+            current_temp = data['current_weather']['temperature']
+            print(f"Temperature in {city_name}: {current_temp}°C")
+        else:
+            print("Error")
 
 get_current_weather(city_name)

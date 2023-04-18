@@ -1,5 +1,9 @@
 from flask import Flask
 from logging.config import dictConfig
+from config import AppConfig
+
+
+app = Flask(__name__)
 
 
 dictConfig({
@@ -18,13 +22,11 @@ dictConfig({
     }
 })
 
-app = Flask(__name__)
+app.config.from_object(AppConfig)
+
+from .views import *
 
 
-@app.route('/hello')
-def hello():
-    app.logger.info('This is a request to `/hello`')
-    return '<h1 style="color:red">Hello, world!</h1>'
 
-if __name__ == '__main__':
-    app.run(port=5000, debug=True)
+
+

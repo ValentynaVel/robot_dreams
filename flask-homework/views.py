@@ -1,5 +1,5 @@
 from __init__ import app
-from flask import Flask, jsonify, request, redirect, abort, render_template
+from flask import jsonify, request, redirect, abort, render_template
 import random
 
 
@@ -8,8 +8,6 @@ def hello():
     app.logger.info('This is a request to `/hello`')
     return '<h1 style="color:red">Hello, world!</h1>'
 
-
-app = Flask(__name__)
 
 # 1.Створити функції для обробки таких запитів:
 # GET/users – має повертати рандомний список імен (будь-яку кількість)
@@ -24,7 +22,8 @@ random_books = ["Kobzar", "The Forest Song", "1984", "Eneida", "Stolen Happiness
 # Function to return a random list of names
 @app.route('/users')
 def get_users():
-    return jsonify(random.sample(random_users, k=random.randint(1, 10)))
+    return render_template('users.html')
+    # return jsonify(random.sample(random_users, k=random.randint(1, 10)))
 
 # Function to return a random list of books in HTML format
 @app.route('/books')
@@ -95,3 +94,16 @@ def login():
         else:
             abort(400, 'Missing username or password')
 
+# 1. Створити html темплейти для кожного із ендпоінтів, що були створені під час виконання минулого ДЗ. Мають
+# відображатися ті самі дані, але інтегровані в темплейти за допомогою контексту.
+# /users
+# /users/{id}
+# /books
+# /books/{id}
+# /params
+# /login
+
+# 2. В ендпоінт /login, при заповненні форми, додати функціонал запису імені користувача в сесію.
+# 3. На всі сторінки додати перевірку на те, чи містить сесія імʼя користувача:
+# Якщо містить – відображати на самому початку сторінки текст "Hello, username", де username – імʼя користувача із сесії.
+# Якщо не містить – перенаправляти користувача на сторінку /login

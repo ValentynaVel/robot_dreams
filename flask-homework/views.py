@@ -1,6 +1,8 @@
 from __init__ import app
-from flask import jsonify, request, redirect, abort, render_template
+from flask import jsonify, request, redirect, abort, render_template, make_response, session, redirect, url_for
 import random
+
+app.secret_key = b'test123' #add your secret key
 
 
 @app.route('/hello')
@@ -19,7 +21,11 @@ def hello():
 def get_users():
     random_users = ["Anna", "Bohdan", "Kristina", "Danil", "Emily", "Filip", "Gradzina", "Hanna", "Inna", "Volodymyr"]
     users = random.sample(random_users, k=random.randint(1, 10))
-    return render_template('user_list.html', users=users)
+    username = session.get('username')
+    if username:
+        return render_template('user_list.html', users=users)
+    else:
+        return redirect('/login')
 
 
 # Function to return a random list of books in HTML format
@@ -29,7 +35,11 @@ def get_books():
                     "Shadows of the Forgotten Ancestors",
                     "The Hobbit", "Marusia Churai", "Harry Potter", "Animal Farm"]
     books = random.sample(random_books, k=random.randint(1, 10))
-    return render_template('books.html', books=books)
+    username = session.get('username')
+    if username:
+        return render_template('books.html', books=books)
+    else:
+        return redirect('/login')
 
 # 2. Створити функції-обробники запитів на GET/users та GET/books, що мають приймати url-параметри
 # (/users/1, /books/kobzar):
@@ -42,14 +52,22 @@ def get_books():
 # Function to handle the /users endpoint with an id parameter
 @app.route('/users/<int:user_id>')
 def get_user_by_id(user_id):
-    return render_template('user.html', user_id=user_id)
+    username = session.get('username')
+    if username:
+        return render_template('user.html', user_id=user_id)
+    else:
+        return redirect('/login')
 
 
 # Function to handle the /books endpoint with a title parameter
 @app.route('/books/<string:title>')
 def get_book_by_title(title):
     transformed_title = title.capitalize()
-    return render_template('book_title.html', title=transformed_title)
+    username = session.get('username')
+    if username:
+        return render_template('book_title.html', title=transformed_title)
+    else:
+        return redirect('/login')
 
 
 # 3. Створити функцію для обробки запитів GET /params – має повертати HTML таблицю, в якій будуть міститися ключі та
@@ -62,7 +80,11 @@ def get_book_by_title(title):
 
 @app.route('/params')
 def params():
-    return render_template('params.html', params=request.args)
+    if 'username' in session:
+        username = session['username']
+        return render_template('params.html', params=request.args, username=username)
+    else:
+        return redirect('/login')
 
 
 # 4. Створити функцію для обробки запитів GET, POST /login – при запиті GET має повертати HTML форму (method=POST,
@@ -70,6 +92,7 @@ def params():
 # При запиті POST має перевіряти чи містяться в даних запиту username та password:
 # Якщо запит містить ці дані, потрібно перенаправити користувача на сторінку /users.
 # Якщо ні – потрібно повернути помилку 400 із інформацією про відсутні дані.
+# 2. В ендпоінт /login, при заповненні форми, додати функціонал запису імені користувача в сесію.
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -78,23 +101,23 @@ def login():
         return render_template('login.html')
     elif request.method == 'POST':
         username = request.form.get('username')
+        session['user'] = username
         password = request.form.get('password')
         if username and password:
-            return redirect('/users')
+            return redirect(url_for('current_user'))
         else:
             error = 'Missing username or password'
             return render_template('login.html', error=error)
 
-# 1. Створити html темплейти для кожного із ендпоінтів, що були створені під час виконання минулого ДЗ. Мають
-# відображатися ті самі дані, але інтегровані в темплейти за допомогою контексту.
-# /users
-# /users/{id}
-# /books
-# /books/{id}
-# /params
-# /login
+@app.route('/cookies')
+def cookies():
+    return request.cookies, 200
 
-# 2. В ендпоінт /login, при заповненні форми, додати функціонал запису імені користувача в сесію.
-# 3. На всі сторінки додати перевірку на те, чи містить сесія імʼя користувача:
-# Якщо містить – відображати на самому початку сторінки текст "Hello, username", де username – імʼя користувача із сесії.
-# Якщо не містить – перенаправляти користувача на сторінку /login
+
+@app.route('/current-user')
+def current_user():
+    current = session.get('user')
+    if current:
+        return f'<h1>Hello, {current}!</h1>'
+    else:
+        return redirect(url_for('/login'))

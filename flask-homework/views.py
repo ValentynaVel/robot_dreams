@@ -14,25 +14,22 @@ def hello():
 # GET/books – має повертати рандомний список книжок (будь-яку кількість) у вигляді html списку
 
 
-# List of random users and books
-random_users = ["Anna", "Bohdan", "Kristina", "Danil", "Emily", "Filip", "Gradzina", "Hanna", "Inna", "Volodymyr"]
-random_books = ["Kobzar", "The Forest Song", "1984", "Eneida", "Stolen Happiness", "Shadows of the Forgotten Ancestors",
-                "The Hobbit", "Marusia Churai", "Harry Potter", "Animal Farm"]
-
 # Function to return a random list of names
 @app.route('/users')
 def get_users():
-    return render_template('users.html')
-    # return jsonify(random.sample(random_users, k=random.randint(1, 10)))
+    random_users = ["Anna", "Bohdan", "Kristina", "Danil", "Emily", "Filip", "Gradzina", "Hanna", "Inna", "Volodymyr"]
+    users = random.sample(random_users, k=random.randint(1, 10))
+    return render_template('user_list.html', users=users)
+
 
 # Function to return a random list of books in HTML format
 @app.route('/books')
 def get_books():
-    books_html = "<ul>"
-    for book in random.sample(random_books, k=random.randint(1, 10)):
-        books_html += "<li>" + book + "</li>"
-    books_html += "</ul>"
-    return books_html
+    random_books = ["Kobzar", "The Forest Song", "1984", "Eneida", "Stolen Happiness",
+                    "Shadows of the Forgotten Ancestors",
+                    "The Hobbit", "Marusia Churai", "Harry Potter", "Animal Farm"]
+    books = random.sample(random_books, k=random.randint(1, 10))
+    return render_template('books.html', books=books)
 
 # 2. Створити функції-обробники запитів на GET/users та GET/books, що мають приймати url-параметри
 # (/users/1, /books/kobzar):
@@ -45,17 +42,15 @@ def get_books():
 # Function to handle the /users endpoint with an id parameter
 @app.route('/users/<int:user_id>')
 def get_user_by_id(user_id):
-    if user_id % 2 == 0:
-        return f'<div>The user ID {user_id} is even.</div>'
-    else:
-        return 404
+    return render_template('user.html', user_id=user_id)
 
 
 # Function to handle the /books endpoint with a title parameter
 @app.route('/books/<string:title>')
 def get_book_by_title(title):
     transformed_title = title.capitalize()
-    return transformed_title
+    return render_template('book_title.html', title=transformed_title)
+
 
 # 3. Створити функцію для обробки запитів GET /params – має повертати HTML таблицю, в якій будуть міститися ключі та
 # значення query parameters.
@@ -66,13 +61,8 @@ def get_book_by_title(title):
 
 
 @app.route('/params')
-def process_params():
-    params = request.args
-    table_html = '<table><tr><th>parameter</th><th>value</th></tr>'
-    for key, value in params.items():
-        table_html += f'<tr><td>{key}</td><td>{value}</td></tr>'
-    table_html += '</table>'
-    return table_html
+def params():
+    return render_template('params.html', params=request.args)
 
 
 # 4. Створити функцію для обробки запитів GET, POST /login – при запиті GET має повертати HTML форму (method=POST,
@@ -92,7 +82,8 @@ def login():
         if username and password:
             return redirect('/users')
         else:
-            abort(400, 'Missing username or password')
+            error = 'Missing username or password'
+            return render_template('login.html', error=error)
 
 # 1. Створити html темплейти для кожного із ендпоінтів, що були створені під час виконання минулого ДЗ. Мають
 # відображатися ті самі дані, але інтегровані в темплейти за допомогою контексту.

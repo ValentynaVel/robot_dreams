@@ -5,10 +5,6 @@
 </head>
 <body>
 	<p>User ID: {{ user_id }}</p>
-	{% if user_id % 2 == 0 %}
-		<div>The user ID {{ user_id }} is even.</div>
-	{% else %}
-		<p>404 - User not found</p>
-	{% endif %}
+	<div>The user ID {{ user_id }} is even.</div>
 </body>
 </html>

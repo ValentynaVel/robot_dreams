@@ -54,7 +54,10 @@ def get_books():
 def get_user_by_id(user_id):
     username = session.get('username')
     if username:
-        return render_template('user.html', user_id=user_id)
+        if user_id % 2 == 0:
+            return render_template('user.html', user_id=user_id)
+        else:
+            return redirect('Bad Request', 400)
     else:
         return redirect('/login')
 
@@ -101,7 +104,7 @@ def login():
         return render_template('login.html')
     elif request.method == 'POST':
         username = request.form.get('username')
-        session['user'] = username
+        session['username'] = username
         password = request.form.get('password')
         if username and password:
             return redirect(url_for('current_user'))
@@ -116,8 +119,9 @@ def cookies():
 
 @app.route('/current-user')
 def current_user():
-    current = session.get('user')
+    current = session.get('username')
     if current:
         return f'<h1>Hello, {current}!</h1>'
     else:
         return redirect(url_for('/login'))
+

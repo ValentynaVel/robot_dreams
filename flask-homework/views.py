@@ -1,8 +1,10 @@
+import os
 from __init__ import app
 from flask import jsonify, request, redirect, abort, render_template, make_response, session, redirect, url_for
 import random
 
-app.secret_key = b'test123' #add your secret key
+
+app.secret_key = os.getenv('SECRET_KEY') #add your secret key
 
 
 @app.route('/hello')
@@ -125,3 +127,28 @@ def current_user():
     else:
         return redirect(url_for('/login'))
 
+# 1. Створити файл .env, куди додати всі дані, що мають бути секретними:
+#   SECRET_KEY
+#   Назва бази даних (та інші деталі за наявності)
+#   Хост та порт, на яких запускається сервіс
+#   Інші значення при необхідності
+
+# 2. Створити файлі .env.template, який буде описувати структуру .env (назви змінних), але не містити значень.
+# Файл .env НЕ ПОТРІБНО пушити на GitHub, .env.template потрібно.
+# (Можна додати .env до .gitignore)
+
+# 3. Замінити в коді всі секретні значення на значення із environment
+
+# 4. За допомогою flask_sqlalchemy підключити базу даних та створити такі моделі:
+# User,
+# Book,
+# Purchase.
+# Структура даних та звʼязки мають бути такими ж, як і в домашньому завданні до теми “Базова робота з базами даних. Part 2”.
+
+# 5. Модифікувати існуючі, або додати нові енпоінти. Дані відображати у форматі JSON або використовуючи HTML template:
+# GET /users — відобразити список всіх обʼєктів User (всі записи відповідної таблиці)
+# GET /users/<int:user_id> —- відобразити інформацію про User із відповідним id, або ж 404
+# GET /books —- відобразити список всіх обʼєктів Book (всі записи відповідної таблиці)
+# GET /books/<int:book_id> —- відобразити інформацію про Book із відповідним id, або ж 404
+# GET /purchases —- відобразити список всіх обʼєктів Purchase (всі записи відповідної таблиці)
+# GET /purchases/<int:purchase_id> —- відобразити інформацію про Purchase із відповідним id, або ж 404

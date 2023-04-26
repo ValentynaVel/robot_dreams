@@ -24,7 +24,7 @@ dictConfig({
 
 app.config.from_object(AppConfig)
 
-from .views import *
+from views import *
 
 
 

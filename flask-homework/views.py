@@ -1,6 +1,8 @@
+import json
 import os
-from __init__ import app
+from __init__ import app, db
 from flask import jsonify, request, redirect, abort, render_template, make_response, session, redirect, url_for
+from models import User, Book, Purchase
 import werkzeug.exceptions
 import random
 
@@ -129,7 +131,6 @@ def current_user():
         return redirect(url_for('/login'))
 
 
-
 # 5. Модифікувати існуючі, або додати нові енпоінти. Дані відображати у форматі JSON або використовуючи HTML template:
 # GET /users — відобразити список всіх обʼєктів User (всі записи відповідної таблиці)
 # GET /users/<int:user_id> —- відобразити інформацію про User із відповідним id, або ж 404
@@ -138,8 +139,72 @@ def current_user():
 # GET /purchases —- відобразити список всіх обʼєктів Purchase (всі записи відповідної таблиці)
 # GET /purchases/<int:purchase_id> —- відобразити інформацію про Purchase із відповідним id, або ж 404
 
+ @app.route('/users')
+ def users():
+     dict_users = [
+         {'id': user.id,
+          'first_name': user.first_name,
+          'second_name': user.second_name,
+          'age': user.age} for user in users]
+     return json.dumps(dict_users)
 
-@app.route('/users')
-def users():
-    pass
 
+ @app.route('/users', methods=['POST', ])
+ def create_user():
+     user = User(
+         first_name=request.json.get('fist_name'),
+         last_name=request.json.get('last_name'),
+         age=request.json.get('age')
+     )
+     db.session.add(user)
+     db.session.commit()
+     return f'User {user.id} created', 201
+
+
+@app.route('/users/<int:user_id>')
+def get_user_by_id():
+    return render_template('users.html', user_id=user_id)
+
+
+ @app.route('/books')
+ def books():
+     dict_books = [
+         {'id': book.id,
+          'title': book.title,
+          'author': book.author,
+          'year': book.year,
+          'price': book.price,} for book in books]
+     return json.dumps(dict_books)
+
+@app.route('/books', methods=['POST', ])
+ def create_book():
+     book = Book(
+         title=request.json.get('title'),
+         author=request.json.get('author'),
+         year=request.json.get('year'),
+         price=request.json.get('price')
+     )
+     db.session.add(book)
+     db.session.commit()
+     return f'User {book.id} created', 201
+
+
+@app.route('/purchases')
+ def purchases():
+     dict_purchases = [
+         {'id': purchase.id,
+          'date': purchase.date,
+          'user_id': purchase.user_id,
+          'book_id': purchase.book_id} for purchase in purchases]
+     return json.dumps(dict_purchases)
+
+@app.route('/purchases', methods=['POST', ])
+ def create_purchase():
+     purchase = Purchase(
+         date=request.json.get('date'),
+         user_id=request.json.get('user_id'),
+         book_id=request.json.get('book_id')
+         )
+     db.session.add(purchase)
+     db.session.commit()
+     return f'Purchase {purchase.id} created', 201

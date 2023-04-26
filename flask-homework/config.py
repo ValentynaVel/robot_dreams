@@ -8,4 +8,6 @@ class AppConfig:
     DEBUG = os.getenv('DEBUG')
     HOST = os.getenv('HOST')
     PORT = os.getenv('PORT')
+    SQLALCHEMY_DATABASE_URL = os.getenv('DATABASE_URL')
+
 

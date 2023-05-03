@@ -1,6 +1,6 @@
 from django.db import models
-from django.book.models import Book
-from django.user.models import User
+from book.models import Book
+from user.models import User
 
 
 class Purchase(models.Model):

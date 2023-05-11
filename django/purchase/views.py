@@ -8,8 +8,8 @@ def purchases(request):
     for purchase in purchases:
         purchase_dict = {
             'date': purchase.date,
-            'user_id': purchase.user_id,
-            'book_id' : purchase.book_id,
+            'user': purchase.user_id,
+            'book': purchase.book_id,
         }
         purchase_list.append(purchase_dict)
     return JsonResponse({'purchases': purchase_list})

@@ -5,9 +5,12 @@ from user.models import User
 
 class Purchase(models.Model):
     date = models.DateField()
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    book = models.ForeignKey(Book, on_delete=models.CASCADE)
+    user = models.ManyToManyField(User, related_name="purchase")
+    book = models.ManyToManyField(Book, related_name="purchase")
 
     class Meta:
         db_table = 'purchase'
+
+    def __str__(self):
+        return f"{self.id}: {self.date} {self.user} {self.book}"
 

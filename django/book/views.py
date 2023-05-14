@@ -9,7 +9,7 @@ def books(request):
         book_dict = {
             'title': book.title,
             'author': book.author,
-            'year' : book.year,
+            'year': book.year,
             'price': book.price,
         }
         book_list.append(book_dict)

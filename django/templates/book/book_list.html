@@ -1,0 +1,6 @@
+
+<div>
+    {% for book in object_list %}
+        {{book.id}} {{book.title|upper}} {{book.author}} {{book.year}} {{book.price}}<br>
+    {% endfor %}}
+</div>

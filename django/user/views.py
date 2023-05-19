@@ -3,6 +3,7 @@ from django.http import JsonResponse
 from .models import User
 from django.views.generic import ListView, CreateView, DetailView
 from user.forms import UserForm
+from rest_framework.viewsets import ModelViewSet
 
 
 class UserListView(ListView):
@@ -18,5 +19,11 @@ class UserCreateView(CreateView):
     model = User
     form_class = UserForm
     success_url = '/user/list'
+
+
+class UserViewSet(ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
 
 

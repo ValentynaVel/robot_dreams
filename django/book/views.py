@@ -14,19 +14,7 @@ class BookDetailView(DetailView):
 class BookCreateView(CreateView):
     model = Book
     form_class = BookForm
-    success_url = '/books'
+    success_url = '/book/list'
 
 
-# def books(request):
-#     books = Book.objects.all()
-#     book_list = []
-#     for book in books:
-#         book_dict = {
-#             'title': book.title,
-#             'author': book.author,
-#             'year': book.year,
-#             'price': book.price,
-#         }
-#         book_list.append(book_dict)
-#     return JsonResponse({'books': book_list})
 

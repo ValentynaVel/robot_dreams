@@ -3,6 +3,8 @@ from .models import Book
 from django.views.generic import ListView, CreateView, DetailView
 from .forms import BookForm
 from rest_framework.viewsets import ModelViewSet
+from .serializers import BookSerializer
+from rest_framework import filters
 
 
 class BookListView(ListView):
@@ -22,6 +24,14 @@ class BookCreateView(CreateView):
 class BookViewSet(ModelViewSet):
     queryset = Book.object.all()
     serializer_class = BookSerializer
+
+    filter_backends = [
+        filters.SearchFilter,
+        filters.OrderingFilter,
+    ]
+    search_fields = ['title', 'author']
+    ordering_fields = ['id']
+
 
 
 

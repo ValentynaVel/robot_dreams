@@ -3,9 +3,10 @@ from django.http import JsonResponse
 from .models import User
 from .serializers import UserSerializer
 from django.views.generic import ListView, CreateView, DetailView
-from user.forms import UserForm
+from .forms import UserForm
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.paginator import PageNumberPaginator
+from rest_framework import filters
 
 
 class CustomPaginator(PageNumberPaginator):
@@ -28,9 +29,13 @@ class UserCreateView(CreateView):
 class UserViewSet(ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+    filter_backends = [
+        filters.SeachFilter,
+        filters.OderingFilter,
+    ]
+    search_fields = ['first_name', 'last_name',]
+    ordering_fields = ['id']
+
     pagination_class = CustomPaginator
-
-
-
-
-
+    max_page_size = 10

@@ -43,7 +43,8 @@ INSTALLED_APPS = [
     'user.apps.UserConfig',
     'book.apps.BookConfig',
     'purchase.apps.PurchaseConfig',
-    'django_bootstrap5'
+    'django_bootstrap5',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [

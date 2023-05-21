@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'user.apps.UserConfig',
     'book.apps.BookConfig',
     'purchase.apps.PurchaseConfig',
-
+    'django_bootstrap5'
 ]
 
 MIDDLEWARE = [
@@ -61,7 +61,9 @@ ROOT_URLCONF = 'robot.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+            BASE_DIR / 'templates/'
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

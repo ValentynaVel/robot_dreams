@@ -1,0 +1,86 @@
+version: "3.8"
+
+services:
+  app:
+    image: valentynavell/robot:latest
+    command: gunicorn --bind :8000 --workers 2 -t 60 robot.wsgi:application
+    restart: always
+    ports:
+      - "8000:8000"
+    depends_on:
+      - database
+    environment:
+      - DB_TYPE=postgresql
+      - DB_USER=robot
+      - DB_PASSWORD=robot
+      - DB_HOST=database
+      - DB_PORT=5432
+      - DB_NAME=robot
+    networks:
+      - broker_network
+      - nginx_network
+      - database_network
+
+  database:
+    image: postgres:14-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_USER=robot
+      - POSTGRES_PASSWORD=robot
+      - POSTGRES_DB=robot
+    networks:
+      - database_network
+
+  broker:
+    image: redis:6.0.4-alpine
+    networks:
+      - broker_network
+    volumes:
+      - broker_data:/data
+
+  celery_worker:
+    image: valentynavell/robot:latest
+    command: celery -A robot worker
+    restart: always
+    depends_on:
+      - database
+    env_file:
+      - .env
+    networks:
+      - broker_network
+
+  celery_beat:
+    image: valentynavell/robot:latest
+    command: celery -A robot beat
+    restart: always
+    depends_on:
+      - database
+    env_file:
+      - .env
+    networks:
+      - broker_network
+
+  nginx:
+    build: ./nginx
+    ports:
+      - "80:80"
+    networks:
+      nginx_network:
+    depends_on:
+      - app
+
+networks:
+  broker_network:
+    name: broker_network
+    driver: bridge
+  nginx_network:
+    name: nginx_network
+    driver: bridge
+  database_network:
+    name: database_network
+    driver: bridge
+
+volumes:
+  postgres_data:
+  broker_data:

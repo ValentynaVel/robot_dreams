@@ -19,6 +19,7 @@ class UserFilter(django_filters.FilterSet):
 class CustomPaginator(PageNumberPaginator):
     page_size_query_param = 'page_size'
 
+
 class UserListView(ListView):
     model = User
 
@@ -39,9 +40,11 @@ class UserViewSet(ModelViewSet):
 
     filterset_class = UserFilter
 
+
     search_fields = ['first_name', 'last_name', ]
     ordering_fields = ['age', 'id']
     pagination_class = CustomPaginator
+
 
     max_page_size = 10
     filter_backends = [
@@ -49,3 +52,4 @@ class UserViewSet(ModelViewSet):
         filters.SeachFilter,
         filters.OderingFilter,
     ]
+

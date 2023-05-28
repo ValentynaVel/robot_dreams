@@ -1,5 +1,3 @@
-from django.http import HttpResponse
-from django.http import JsonResponse
 from .models import User
 from .serializers import UserSerializer
 from django.views.generic import ListView, CreateView, DetailView
@@ -42,6 +40,7 @@ class UserViewSet(ModelViewSet):
 
     filterset_class = UserFilter
 
+
     search_fields = ['first_name', 'last_name', ]
     ordering_fields = ['age', 'id']
     pagination_class = CustomPaginator
@@ -53,5 +52,4 @@ class UserViewSet(ModelViewSet):
         filters.SeachFilter,
         filters.OderingFilter,
     ]
-
 

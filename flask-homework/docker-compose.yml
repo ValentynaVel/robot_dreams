@@ -3,7 +3,7 @@ version: "3.8"
 services:
   flask_app:
     build: "."
-    command: gunicorn --bind 0.0.0.0:4200 :app
+    command: gunicorn --bind 0.0.0.0:4200 flask-homework:app
     restart: always
     ports:
       - "4200:4200"

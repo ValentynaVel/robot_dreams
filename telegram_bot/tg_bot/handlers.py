@@ -1,5 +1,6 @@
-from telegram.ext import CommandHandler, MessageHandler, Filters
+from telegram.ext import CommandHandler, MessageHandler
 from .views import shopping_list_bp
+from telegram import Filters
 
 
 def register_handlers(dp):
@@ -18,7 +19,8 @@ shopping_list = []
 def start(bot, update):
     user = update.message.from_user
     bot.send_message(chat_id=update.message.chat_id,
-                     text=f"Hi {user.first_name}! Welcome to the Shopping List Bot. Use /add to add items to your list.")
+                     text=f"Hi {user.first_name}! Welcome to the Shopping List Bot. Use /add to add items to your "
+                          f"list.")
 
 
 # handler for the /add command
